@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+//引入element-ui 
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI) //全局注册 任意位置都可以使用 
 
 Vue.config.productionTip = false
 
