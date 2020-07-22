@@ -1,7 +1,6 @@
 <template>
-  <div id="app">
-    <div id="nav"></div>
-  </div>
+  <!-- app.vue 只放一个容器  显示组件的内容 -->
+   <router-view/>
 </template>
 
 <style lang="less">
