@@ -76,29 +76,38 @@ export default {
         check: [
           {
             // 原本 是  validator :  return  之前的 变量名  validator: validator   然后我们可以简写如下
-            validator
+            validator,
           },
         ],
       },
-     
     };
   },
-   methods:{
-        login () {
-          //通过el-form组件的 validate方法 校验整个表单的数据
-          // 传入一个回调函数 isOk为ture 说明 整个校验规则成功了
-          //如果false 说明有错误
-          this.$refs.loginForm.validate( (isOk) => {
-            if (isOk) {
-              
-              this.$message({type:'success',message:'成功'})
-            } else {
-              
-              this.$message({type:'warning',message:'失败'})
-            }
+  methods: {
+    login() {
+      //通过el-form组件的 validate方法 校验整个表单的数据
+      // 传入一个回调函数 isOk为ture 说明 整个校验规则成功了
+      //如果false 说明有错误
+      this.$refs.loginForm.validate(isOk => {
+        if (isOk) {
+          //请求
+          //axios中 data中放置body参数  params是放置地址参数
+          this.$axios({
+            url: '/mp/v1_0/authorizations',
+            method: 'post', 
+            data: this.loginForm
+          }).then(result => {
+            this.$router.push('/home') //登陆成功 跳转到首页
+          })
+          .catch(err => {
+            this.$message({
+              message:'手机号或验证码错误',
+              type:'warning'
+            })
           })
         }
-      }
+      });
+    },
+  },
 };
 </script>
 
