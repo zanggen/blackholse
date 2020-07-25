@@ -96,7 +96,11 @@ export default {
             method: 'post', 
             data: this.loginForm
           }).then(result => {
-            this.$router.push('/home') //登陆成功 跳转到首页
+            // console.log(result.data.data.token)
+            //放到前端缓存
+            window.localStorage.setItem('user-token', result.data.data.token)
+
+            this.$router.push('/') //登陆成功 跳转到首页
           })
           .catch(err => {
             this.$message({

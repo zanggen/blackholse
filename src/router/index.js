@@ -7,9 +7,14 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
 
     component: Login
+  },
+  {//设置一个默认
+    path:'/',
+    //硬定向到首页
+    redirect:'/home'
   },
   {
     path: '/home',
