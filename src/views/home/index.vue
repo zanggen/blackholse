@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 最外层容器 -->
-    <el-container>
+    <el-container >
       <!-- 左侧导航 -->
       <el-aside style="width:200px">
         <layout-aside></layout-aside>
@@ -20,17 +20,14 @@
 </template>
 
 <script>
-//引入组件
-import layoutAside from '../../components/home/layout-aside'
-import layoutHead from '../../components/home/layout-head'
+
+
 export default {
-  //注册组件
-  components:{
-    'layout-aside':layoutAside,
-    'layout-head':layoutHead
+
+ 
   }
 
-};
+
 </script>
 
 <style>

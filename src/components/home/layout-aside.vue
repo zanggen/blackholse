@@ -18,10 +18,10 @@
 <!-- el-submenu 是有折叠的菜单 -->
       <el-submenu index="3"> 
           <!-- 折叠菜单的名字 需要具名插槽 -->
-          <tempalte slot="title">
+          <template slot="title">
               <i class="el-icon-s-order"></i>
                 <span >内容管理</span>
-          </tempalte>
+          </template>
           <!-- 这里在写 单菜单  el-menu-item -->
           <el-menu-item>发布文章</el-menu-item>
           <el-menu-item>内容列表</el-menu-item>
@@ -31,10 +31,10 @@
       <!-- 粉丝管理 -->
       <el-submenu index="4"> 
           <!-- 折叠菜单的名字 需要具名插槽 -->
-          <tempalte slot="title">
+          <template slot="title">
               <i class="el-icon-s-custom"></i>
                 <span >粉丝管理</span>
-          </tempalte>
+          </template>
           <!-- 这里在写 单菜单  el-menu-item -->
           <el-menu-item>图文数据</el-menu-item>
           <el-menu-item>粉丝概况</el-menu-item>
