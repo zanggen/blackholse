@@ -10,7 +10,8 @@
 
     <!-- 右侧 -->
     <el-col class="right" :span="3">
-      <img class="head-img" src="../../assets/image/avatar.jpg" alt />
+      <!-- 属性不给:  相当于字符串 -->
+      <img class="head-img" :src="userInfo.photo?userInfo.photo : defaultImg" alt />
       <!-- 下拉组件  el-dropdown -->
       <el-dropdown trigger="click">
       <span class="el-dropdown-link">
@@ -27,7 +28,32 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data () {
+    return {
+      userInfo:{},
+      defaultImg:require('../../assets/image/avatar.jpg') //路径转换成 base64字符串
+    }
+  },
+  methods:{
+    //定义一个获取用户数据的方法
+    getUserInfo () {
+      let token = window.localStorage.getItem("user-token") //获取token
+      //axios 请求
+      this.$axios({
+        url:'/mp/v1_0/user/profile',
+        //创建一个headers 对象 里面再写请求参数
+        headers:{'Authorization': `Bearer ${token}`  }
+      }).then(result => {
+        console.log(result)
+        this.userInfo = result.data.data
+      })
+    }
+  },
+  created () {
+     this.getUserInfo() //一进页面就获取数据
+  }
+};
 </script>
 
 <style lang="less" scoped>
