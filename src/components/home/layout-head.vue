@@ -13,14 +13,15 @@
       <!-- 属性不给:  相当于字符串 -->
       <img class="head-img" :src="userInfo.photo?userInfo.photo : defaultImg" alt />
       <!-- 下拉组件  el-dropdown -->
-      <el-dropdown trigger="click">
+      <!-- 给下拉组件 绑定 command 事件 给item 设置相应的 command值 -->
+      <el-dropdown @command="handleCommand" trigger="click">
       <span class="el-dropdown-link">
-        下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+        {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item >个人信息</el-dropdown-item>
-        <el-dropdown-item>git地址</el-dropdown-item>
-        <el-dropdown-item >退出</el-dropdown-item>
+        <el-dropdown-item command = "account" >个人信息</el-dropdown-item>
+        <el-dropdown-item command = "git">git地址</el-dropdown-item>
+        <el-dropdown-item command = "logout">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     </el-col>
@@ -48,6 +49,19 @@ export default {
         console.log(result)
         this.userInfo = result.data.data
       })
+    },
+    // 定义一个 下拉菜单跳转的方法
+    handleCommand (command) {
+      //判断 菜单
+      if (command === 'account') { //如果点击的是账户信息
+
+      } else if (command === 'git') { //如果是git
+      //就跳转到 git 仓库
+        window.location.href ="https://github.com/zanggen/blackholse/commits/master"
+      } else if (command === 'logout') { //如果是退出
+        window.localStorage.clear() //清空缓存 , 只能清空自己当前的缓存  == token 也就清空了
+        this.$router.push('/login')//跳转到 登陆页面
+      }
     }
   },
   created () {
