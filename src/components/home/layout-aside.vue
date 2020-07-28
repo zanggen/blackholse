@@ -24,9 +24,9 @@
                 <span >内容管理</span>
           </template>
           <!-- 这里在写 单菜单  el-menu-item -->
-          <el-menu-item>发布文章</el-menu-item>
-          <el-menu-item>内容列表</el-menu-item>
-          <el-menu-item>评论列表</el-menu-item>
+          <el-menu-item index="/home/publish">发布文章</el-menu-item>
+          <el-menu-item index="/home/articles">内容列表</el-menu-item>
+          <el-menu-item index="/home/comment">评论列表</el-menu-item>
       </el-submenu>
       
       <!-- 粉丝管理 -->
@@ -37,10 +37,10 @@
                 <span >粉丝管理</span>
           </template>
           <!-- 这里在写 单菜单  el-menu-item -->
-          <el-menu-item>图文数据</el-menu-item>
-          <el-menu-item>粉丝概况</el-menu-item>
-          <el-menu-item>粉丝画像</el-menu-item>
-          <el-menu-item>粉丝列表</el-menu-item>
+          <el-menu-item index="/home/fansdata">图文数据</el-menu-item>
+          <el-menu-item index="/home/fansinfo">粉丝概况</el-menu-item>
+          <el-menu-item index="/home/fansimage">粉丝画像</el-menu-item>
+          <el-menu-item index="/home/fanlist">粉丝列表</el-menu-item>
       </el-submenu>
       
       <el-menu-item index="5">

@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Main from '../views/home/main'
+import Publish from '../views/home/publish'
+
 
 Vue.use(VueRouter)
 
@@ -19,17 +21,17 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'Home',
+    // name: 'Home',
     component: Home,
    // 设置二级路由
    children:[{
     path:'' , //二级路由 默认加载页面 可以 写个/  或者什么都不写  而且必须是加载的 所以不用设置按需加载
     component: Main
   }
-  // ,{
-  //   path:'publish', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
-  //   components:Publish
-  // }
+  ,{
+    path:'publish', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
+    components:Publish
+  }
    ]
 
   }
