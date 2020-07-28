@@ -8,15 +8,16 @@
       background-color="#353b4e"
       text-color="#adafb5"
       active-text-color="#ffd04b"
+      router
     >
      
-      <el-menu-item index="2">
+      <el-menu-item index="/">
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
       </el-menu-item>
 <!-- 内容管理 -->
 <!-- el-submenu 是有折叠的菜单 -->
-      <el-submenu index="3"> 
+      <el-submenu index="1"> 
           <!-- 折叠菜单的名字 需要具名插槽 -->
           <template slot="title">
               <i class="el-icon-s-order"></i>
@@ -29,7 +30,7 @@
       </el-submenu>
       
       <!-- 粉丝管理 -->
-      <el-submenu index="4"> 
+      <el-submenu index="2"> 
           <!-- 折叠菜单的名字 需要具名插槽 -->
           <template slot="title">
               <i class="el-icon-s-custom"></i>
