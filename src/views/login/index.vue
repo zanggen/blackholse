@@ -87,27 +87,28 @@ export default {
       //通过el-form组件的 validate方法 校验整个表单的数据
       // 传入一个回调函数 isOk为ture 说明 整个校验规则成功了
       //如果false 说明有错误
-      this.$refs.loginForm.validate(isOk => {
+      this.$refs.loginForm.validate((isOk) => {
         if (isOk) {
           //请求
           //axios中 data中放置body参数  params是放置地址参数
           this.$axios({
-            url: '/mp/v1_0/authorizations',
-            method: 'post', 
-            data: this.loginForm
-          }).then(result => {
-            // console.log(result.data.data.token)
-            //放到前端缓存
-            window.localStorage.setItem('user-token', result.data.data.token)
+            url: "/mp/v1_0/authorizations",
+            method: "post",
+            data: this.loginForm,
+          })
+            .then((result) => {
+              // console.log(result.data.data.token)
+              //放到前端缓存
+              window.localStorage.setItem("user-token", result.data.token);
 
-            this.$router.push('/') //登陆成功 跳转到首页
-          })
-          .catch(err => {
-            this.$message({
-              message:'手机号或验证码错误',
-              type:'warning'
+              this.$router.push("/"); //登陆成功 跳转到首页
             })
-          })
+            .catch((err) => {
+              this.$message({
+                message: "手机号或验证码错误",
+                type: "warning",
+              });
+            });
         }
       });
     },

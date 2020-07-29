@@ -15,58 +15,63 @@
       <!-- 下拉组件  el-dropdown -->
       <!-- 给下拉组件 绑定 command 事件 给item 设置相应的 command值 -->
       <el-dropdown @command="handleCommand" trigger="click">
-      <span class="el-dropdown-link">
-        {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command = "account" >个人信息</el-dropdown-item>
-        <el-dropdown-item command = "git">git地址</el-dropdown-item>
-        <el-dropdown-item command = "logout">退出</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        <span class="el-dropdown-link">
+          {{userInfo.name}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="account">个人信息</el-dropdown-item>
+          <el-dropdown-item command="git">git地址</el-dropdown-item>
+          <el-dropdown-item command="logout">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-col>
   </el-row>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      userInfo:{},
-      defaultImg:require('../../assets/image/avatar.jpg') //路径转换成 base64字符串
-    }
+      userInfo: {},
+      defaultImg: require("../../assets/image/avatar.jpg"), //路径转换成 base64字符串
+    };
   },
-  methods:{
+  methods: {
     //定义一个获取用户数据的方法
-    getUserInfo () {
-      let token = window.localStorage.getItem("user-token") //获取token
+    getUserInfo() {
+      // let token = window.localStorage.getItem("user-token") //获取token
       //axios 请求
       this.$axios({
-        url:'/mp/v1_0/user/profile',
+        url: "/mp/v1_0/user/profile",
         //创建一个headers 对象 里面再写请求参数
-        headers:{'Authorization': `Bearer ${token}`  }
-      }).then(result => {
-        console.log(result)
-        this.userInfo = result.data.data
-      })
+        // headers:{'Authorization': `Bearer ${token}`  }
+      }).then((result) => {
+        
+        console.log(result);
+        this.userInfo = result.data;
+      });
     },
     // 定义一个 下拉菜单跳转的方法
-    handleCommand (command) {
+    handleCommand(command) {
       //判断 菜单
-      if (command === 'account') { //如果点击的是账户信息
-
-      } else if (command === 'git') { //如果是git
-      //就跳转到 git 仓库
-        window.location.href ="https://github.com/zanggen/blackholse/commits/master"
-      } else if (command === 'logout') { //如果是退出
-        window.localStorage.clear() //清空缓存 , 只能清空自己当前的缓存  == token 也就清空了
-        this.$router.push('/login')//跳转到 登陆页面
+      if (command === "account") {
+        //如果点击的是账户信息
+      } else if (command === "git") {
+        //如果是git
+        //就跳转到 git 仓库
+        window.location.href =
+          "https://github.com/zanggen/blackholse/commits/master";
+      } else if (command === "logout") {
+        //如果是退出
+        window.localStorage.clear(); //清空缓存 , 只能清空自己当前的缓存  == token 也就清空了
+        this.$router.push("/login"); //跳转到 登陆页面
       }
-    }
+    },
   },
-  created () {
-     this.getUserInfo() //一进页面就获取数据
-  }
+  created() {
+    this.getUserInfo(); //一进页面就获取数据
+  },
 };
 </script>
 

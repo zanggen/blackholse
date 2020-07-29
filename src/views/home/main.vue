@@ -1,5 +1,5 @@
 <template>
-  <div class="main">wocao</div>
+  <div class="main"></div>
 </template>
 
 <script>
