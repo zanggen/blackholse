@@ -48,7 +48,8 @@ axios.interceptors.response.use(function (response) {
             break;
     }
     Message({type:'warning', message})
-    console.log(error)
+    return  new Promise(function () {}) // 返回一个 promise 表示错误已经被处理掉, 相当于强行截至的错误
+    
 })
 
 

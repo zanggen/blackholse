@@ -1,6 +1,6 @@
 import layoutAside from './home/layout-aside.vue' 
 import layoutHead from './home/layout-head.vue' 
-
+import breadCrumb from './common/bread-crumb.vue'
 //所有自定义组件的插件
 
 export default {
@@ -8,6 +8,7 @@ export default {
     install: function (Vue) {
         Vue.component('layout-aside',layoutAside) //左侧导航组件
         Vue.component('layout-head',layoutHead) //头部导航组件
+        Vue.component('bread-crumb',breadCrumb)
 
     }
 }
