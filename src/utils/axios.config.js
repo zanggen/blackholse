@@ -1,5 +1,9 @@
 // 处理axios 拦截器     请求拦截器   响应拦截器
 import axios from 'axios'
+// 引入router
+import router from '../router/permission'
+//单独引入Message
+import{Message} from 'element-ui'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'  //把基础地址给赋值 那以后写的时候就可以省略基础地址
 
 // 请求拦截器
@@ -15,7 +19,37 @@ axios.interceptors.request.use(function (config) {
 //响应拦截器
 axios.interceptors.response.use(function (response) {
     return response.data ? response.data : {}
-}, function () { })
+    // 下面是 对异常数据 统一处理
+}, function (error) {
+    let status = error.response.status
+    let message = ''
+    switch (status) {
+        case 400:
+            message = "请求参数错误"
+            break;
+        case 401:
+            alert('登陆时效过期,请重新登陆')
+            window.localStorage.clear() //因为token有可能过期,清除垃圾token
+            router.push('/login') //这不是在vue实例 所以用不了 this.$router.push
+            break;
+        case 403:
+            message = "用户非实名认证用户，无权限登录"
+            break;
+        case 404:
+            message = "手机号不正确"
+            break;
+        case 507:
+            message = "服务器或数据库异常"
+            break;
+
+
+        default:
+            message = '未知错误'
+            break;
+    }
+    Message({type:'warning', message})
+    console.log(error)
+})
 
 
 

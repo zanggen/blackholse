@@ -103,12 +103,12 @@ export default {
 
               this.$router.push("/"); //登陆成功 跳转到首页
             })
-            .catch((err) => {
-              this.$message({
-                message: "手机号或验证码错误",
-                type: "warning",
-              });
-            });
+            // .catch(err => {
+            //   this.$message({
+            //     message: "手机号或验证码错误",
+            //     type: "warning",
+            //   });
+            // });
         }
       });
     },
