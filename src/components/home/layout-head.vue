@@ -48,7 +48,7 @@ export default {
         // headers:{'Authorization': `Bearer ${token}`  }
       }).then((result) => {
         
-        console.log(result);
+        // console.log(result);
         this.userInfo = result.data;
       });
     },

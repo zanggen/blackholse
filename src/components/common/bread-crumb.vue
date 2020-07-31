@@ -1,7 +1,10 @@
 <template>
-  <el-breadcrumb separator="/">
+  <el-breadcrumb separator=">">
   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-  <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+  <el-breadcrumb-item>
+      <!-- 定义一个具名插槽-->
+      <slot name="title"></slot>
+  </el-breadcrumb-item>
   
 </el-breadcrumb>
 </template>
