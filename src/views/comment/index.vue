@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <!-- 插槽内容 => 标题 -->
     <bread-crumb slot="header">
       <template slot="title">评论列表</template>
@@ -39,6 +39,7 @@
 export default {
   data() {
     return {
+      loading: false, //  默认进度条 状态
       list: [],
       page:{
         page : 1, //当前页
@@ -84,6 +85,7 @@ export default {
     },
     // 定义获取评论方法
     getComments() {
+      this.loading = true //请求数据之前 把进度条打开
       //query参数 相当于  get参数,路径参数,url参数
       //axios 分两种参数[body参数, 路径参数]     body参数放在 data里面     路径参数 放在 params 里面
       this.$axios({
@@ -93,10 +95,12 @@ export default {
         // console.log(result);
         this.list = result.data.results;
         this.page.total = result.data.total_count
+        this.loading = false
       });
     },
   },
   created() {
+    
     //调用
     this.getComments();
   },
