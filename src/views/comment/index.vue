@@ -42,11 +42,13 @@ export default {
         this.$axios({
           method:'put',
           url:'/mp/v1_0/comments/status',
-          params:{article_id : row.id}, // 传article 参数
+          params:{article_id : row.id.toString()}, // 传article 参数
           data:{allow_comment: !row.comment_status} // 取反  因为当前如果是true 只能改为 false , 如果当前是false 只能改成 true
         }).then(result => {
           this.getComments()
         })
+      }).catch(error => {
+        console.log(error)
       })
       
     },

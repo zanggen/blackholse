@@ -4,7 +4,17 @@ import axios from 'axios'
 import router from '../router/permission'
 //单独引入Message
 import{Message} from 'element-ui'
+import jsonBigInt from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'  //把基础地址给赋值 那以后写的时候就可以省略基础地址
+
+
+axios.defaults.transformResponse = [function (data) {
+    // data 是响应回来的(后台传过来的) 字符串
+   
+    return  jsonBigInt.parse(data)
+
+}]
+
 
 // 请求拦截器
 axios.interceptors.request.use(function (config) {
