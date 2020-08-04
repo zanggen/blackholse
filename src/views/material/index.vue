@@ -40,6 +40,18 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <!-- 分页 -->
+    <el-row type="flex" justify="center" style="margin-top:10px">
+      <el-pagination
+        :current-page="page.page"
+        :page-size="page.pageSize"
+         :total="page.total" 
+        @current-change="changePage"
+        style="margin:10px"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -49,9 +61,22 @@ export default {
     return {
       activeName: "all",
       list: [],
+      page: {
+        page: 1, //当前页
+        pageSize: 10, //当前每页条数
+        total: 0, //总条数
+      },
     };
   },
   methods: {
+       //页面改变
+    changePage(newPage) {
+      // alert(newPage + '-----' + this.page.page)
+      this.page.page = newPage // 
+      // 调用接口 拉取数据
+     this.getMaterial() // 拉取数据  刷新页面
+    
+    },
     //注册切换tab方法
     changeTab() {
       //this.activeName 是最新标签
@@ -65,10 +90,11 @@ export default {
       //调用接口
       this.$axios({
         url: "/mp/v1_0/user/images",
-        params: { collect: this.activeName === 'collect' }, // false 为 显示全部内容  true 显示 收藏
+        params: { collect: this.activeName === "collect",page:this.page.page, per_page:this.page.pageSize }, // false 为 显示全部内容  true 显示 收藏
       }).then((result) => {
         console.log(result);
         this.list = result.data.results;
+         this.page.total = result.data.total_count
       });
     },
   },
