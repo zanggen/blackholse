@@ -85,17 +85,18 @@ export default {
     },
     // 定义获取评论方法
     getComments() {
-      this.loading = true //请求数据之前 把进度条打开
+      this.loading = true //请求数据之前 把loading加载 开启
       //query参数 相当于  get参数,路径参数,url参数
       //axios 分两种参数[body参数, 路径参数]     body参数放在 data里面     路径参数 放在 params 里面
       this.$axios({
         url: "/mp/v1_0/articles",
         params: { response_type: "comment", page:this.page.page, per_page:this.page.pageSize },
       }).then((result) => {
+        this.loading = false // 响应数据之后 就把 loading加载 关闭
         // console.log(result);
         this.list = result.data.results;
         this.page.total = result.data.total_count
-        this.loading = false
+        
       });
     },
   },
