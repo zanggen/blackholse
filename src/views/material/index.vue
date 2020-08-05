@@ -4,7 +4,7 @@
       <template slot="title">素材管理</template>
     </bread-crumb>
 
-    <el-tabs v-model="activeName" @tab-click="changeTab">
+    <el-tabs  v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部" name="all">
         <!-- 全部素材 显示的内容 -->
         <div class="card-list">
@@ -16,8 +16,8 @@
           >
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i @click="collectOrCancel(item)" :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
+              <i @click="delImg(item)" class="el-icon-delete-solid"></i>
             </el-row>
           </el-card>
         </div>
@@ -33,8 +33,8 @@
           >
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <!-- <i :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
+              <i  class="el-icon-delete-solid"></i> -->
             </el-row>
           </el-card>
         </div>
@@ -58,17 +58,54 @@
 <script>
 export default {
   data() {
+    
     return {
       activeName: "all",
       list: [],
       page: {
         page: 1, //当前页
-        pageSize: 10, //当前每页条数
+        pageSize: 20, //当前每页条数
         total: 0, //总条数
       },
     };
   },
   methods: {
+      //收藏或取消
+      collectOrCancel(item) {
+          let mess = item.is_collected ? '取消': ''
+          this.$confirm(`你确定要${mess}收藏么?`).then(( ) => {
+              //确定收藏或者取消
+            //   this.$axios({
+            //       url:` /mp/v1_0/user/images/${item.id}`,
+            //       method:'put',
+            //       data:{collect :!item.is_collected} //取反
+            //   }).then(() => {
+            //       this.getMaterial() //重新加载页面
+            //   })
+             this.$axios({
+                  url:`/mp/v1_0/user/images/${item.id}`,
+                  method:'put',
+                  data:{collect :!item.is_collected}  // 取反
+              }).then(() => {
+                  this.getMaterial() // 重新加载页面
+              })
+          })
+      },
+   
+      //删除图片
+      delImg (item) {
+          this.$confirm('你确定要删除么?','提示').then(() =>{
+              //确定要删除
+              this.$axios({
+                  //:target 是图片ID => item.id => 直接写不行 用字符串模版 
+                  url:`/mp/v1_0/user/images/${item.id}`,
+                //   url:' /mp/v1_0/user/images'+ item.id,
+                  method:'delete'
+              }).then(() => {
+                  this.getMaterial() //删除之后 重新加载页面
+              })
+          }) 
+      },
        //页面改变
     changePage(newPage) {
       // alert(newPage + '-----' + this.page.page)
@@ -92,7 +129,7 @@ export default {
         url: "/mp/v1_0/user/images",
         params: { collect: this.activeName === "collect",page:this.page.page, per_page:this.page.pageSize }, // false 为 显示全部内容  true 显示 收藏
       }).then((result) => {
-        console.log(result);
+        // console.log(result);
         this.list = result.data.results;
          this.page.total = result.data.total_count
       });
@@ -107,6 +144,7 @@ export default {
 <style lang='less' scpoed>
 .material {
   .card-list {
+     
     display: flex;
     flex-wrap: wrap;
     .img-card {

@@ -10,8 +10,8 @@ axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'  //把基础地址给
 
 axios.defaults.transformResponse = [function (data) {
     // data 是响应回来的(后台传过来的) 字符串
-   
-    return  jsonBigInt.parse(data)
+    
+    return data ? jsonBigInt.parse(data) : {}
 
 }]
 
@@ -28,6 +28,7 @@ axios.interceptors.request.use(function (config) {
 
 //响应拦截器
 axios.interceptors.response.use(function (response) {
+    
     return response.data ? response.data : {}
     // 下面是 对异常数据 统一处理
 }, function (error) {
