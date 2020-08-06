@@ -3,8 +3,19 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <!-- 上传图片 -->
+   <el-upload 
+   :http-request="uploadImg"
+   :show-file-list="false"
+    action="" 
+   class="upload-btn"
+     >
+       <el-button type="primary" size="middle">上传图片</el-button>
+   </el-upload>
+   
+  
 
-    <el-tabs  v-model="activeName" @tab-click="changeTab">
+    <el-tabs type="card" v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部" name="all">
         <!-- 全部素材 显示的内容 -->
         <div class="card-list">
@@ -16,7 +27,11 @@
           >
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i @click="collectOrCancel(item)" :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
+              <i
+                @click="collectOrCancel(item)"
+                :style="{color: item.is_collected? 'red' : ''}"
+                class="el-icon-star-on"
+              ></i>
               <i @click="delImg(item)" class="el-icon-delete-solid"></i>
             </el-row>
           </el-card>
@@ -34,18 +49,19 @@
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
               <!-- <i :style="{color: item.is_collected? 'red' : ''}" class="el-icon-star-on"></i>
-              <i  class="el-icon-delete-solid"></i> -->
+              <i  class="el-icon-delete-solid"></i>-->
             </el-row>
           </el-card>
         </div>
       </el-tab-pane>
     </el-tabs>
+
     <!-- 分页 -->
     <el-row type="flex" justify="center" style="margin-top:10px">
       <el-pagination
         :current-page="page.page"
         :page-size="page.pageSize"
-         :total="page.total" 
+        :total="page.total"
         @current-change="changePage"
         style="margin:10px"
         background
@@ -58,7 +74,6 @@
 <script>
 export default {
   data() {
-    
     return {
       activeName: "all",
       list: [],
@@ -70,49 +85,59 @@ export default {
     };
   },
   methods: {
-      //收藏或取消
-      collectOrCancel(item) {
-          let mess = item.is_collected ? '取消': ''
-          this.$confirm(`你确定要${mess}收藏么?`).then(( ) => {
-              //确定收藏或者取消
-            //   this.$axios({
-            //       url:` /mp/v1_0/user/images/${item.id}`,
-            //       method:'put',
-            //       data:{collect :!item.is_collected} //取反
-            //   }).then(() => {
-            //       this.getMaterial() //重新加载页面
-            //   })
-             this.$axios({
-                  url:`/mp/v1_0/user/images/${item.id}`,
-                  method:'put',
-                  data:{collect :!item.is_collected}  // 取反
-              }).then(() => {
-                  this.getMaterial() // 重新加载页面
-              })
+      //上传图片
+      uploadImg(params) {
+        // fromdata类型
+        let obj = new FormData()
+        obj.append('image', params.file)
+         //调用接口
+         this.$axios({
+           url:'/mp/v1_0/user/images',
+           method:'post',
+           data:obj
+         }).then(() => {
+           this.getMaterial() //重新加载
+         })
+      },
+    //收藏或取消
+    collectOrCancel(item) {
+      let mess = item.is_collected ? "取消" : "";
+      this.$confirm(`你确定要${mess}收藏么?`).then(() => {
+        //确定收藏或者取消
+          this.$axios({
+              url:`/mp/v1_0/user/images/${item.id}`,
+              method:'put',
+              data:{collect :!item.is_collected} //取反
+          }).then(() => {
+              
+              this.getMaterial() //重新加载页面
           })
-      },
-   
-      //删除图片
-      delImg (item) {
-          this.$confirm('你确定要删除么?','提示').then(() =>{
-              //确定要删除
-              this.$axios({
-                  //:target 是图片ID => item.id => 直接写不行 用字符串模版 
-                  url:`/mp/v1_0/user/images/${item.id}`,
-                //   url:' /mp/v1_0/user/images'+ item.id,
-                  method:'delete'
-              }).then(() => {
-                  this.getMaterial() //删除之后 重新加载页面
-              })
-          }) 
-      },
-       //页面改变
+      });
+    },
+
+    //删除图片
+    
+    delImg(item) {
+        
+      this.$confirm("你确定要删除么?", "提示").then(() => {
+        //确定要删除
+        
+        this.$axios({
+          //:target 是图片ID => item.id => 直接写不行 用字符串模版
+          url:`/mp/v1_0/user/images/${item.id}`,
+          //   url:'/mp/v1_0/user/images'+ item.id,
+          method: "delete"
+        }).then(() => {        
+          this.getMaterial() //删除之后 重新加载页面
+        });
+      });
+    },
+    //页面改变
     changePage(newPage) {
       // alert(newPage + '-----' + this.page.page)
-      this.page.page = newPage // 
+      this.page.page = newPage; //
       // 调用接口 拉取数据
-     this.getMaterial() // 拉取数据  刷新页面
-    
+      this.getMaterial(); // 拉取数据  刷新页面
     },
     //注册切换tab方法
     changeTab() {
@@ -127,11 +152,15 @@ export default {
       //调用接口
       this.$axios({
         url: "/mp/v1_0/user/images",
-        params: { collect: this.activeName === "collect",page:this.page.page, per_page:this.page.pageSize }, // false 为 显示全部内容  true 显示 收藏
+        params: {
+          collect: this.activeName === "collect",
+          page: this.page.page,
+          per_page: this.page.pageSize,
+        }, // false 为 显示全部内容  true 显示 收藏
       }).then((result) => {
         // console.log(result);
         this.list = result.data.results;
-         this.page.total = result.data.total_count
+        this.page.total = result.data.total_count;
       });
     },
   },
@@ -143,8 +172,13 @@ export default {
 
 <style lang='less' scpoed>
 .material {
+  .upload-btn {
+    position: absolute;
+    right: 45px;
+    margin-top: -6px;
+ 
+  }
   .card-list {
-     
     display: flex;
     flex-wrap: wrap;
     .img-card {
