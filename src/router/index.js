@@ -41,6 +41,12 @@ const routes = [
       path: 'material', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/material')  //按需加载
     }
+    ,{
+      
+      // path: '/home/material', 
+      path: 'articles', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
+      component: () => import( '../views/articles')  //按需加载
+    }
   ]
 
   }
