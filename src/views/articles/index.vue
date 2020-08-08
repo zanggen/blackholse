@@ -7,27 +7,38 @@
     <!-- 搜索栏工具栏 -->
     <el-form style="margin-left:30px">
       <el-form-item label="文章状态:">
-        <el-radio-group>
-          <el-radio>全部</el-radio>
-          <el-radio>草稿</el-radio>
-          <el-radio>待审核</el-radio>
-          <el-radio>审核通过</el-radio>
-          <el-radio>审核失败</el-radio>
+        <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
+        <el-radio-group v-model="searchForm.status">
+          <el-radio :label="5" >全部</el-radio>
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="1">待审核</el-radio>
+          <el-radio :label="2">审核通过</el-radio>
+          <el-radio :label="3">审核失败</el-radio>
+          
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
-        <el-select v-model="value" placeholder="请选择"></el-select>
+         
+        <el-select v-model="searchForm.channel_id" >
+            <el-option 
+            v-for="item in channels" 
+            :key="item.id"  
+            :label="item.name" 
+            :value="item.id"  
+            ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="时间选择">
         <el-date-picker
-          v-model="value1"
-          type="datetimerange"
-          range-separator="至"
+        value-format="yyyy-MM-dd"
+          v-model="searchForm.dateRange"
+          type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
     </el-form>
+    {{searchForm}}
     <!-- 内容结构 -->
     <div class="total-info">共找到59279条符合条件的内容</div>
 
@@ -63,12 +74,28 @@ export default {
     return {
       list: [], //定义一个空数组
       defaultImg: require("../../assets/image/avatar.jpg"), //图片地址转成 base64
+      searchForm: {
+        //定义表单对象
+        status: 5, //文章状态
+        channel_id: null,  //频道列表
+        dateRange:'' //日期范围
 
-      value: "",
+
+      },
+
+      channels: [],//频道列表数据
       value1: "",
     };
   },
   methods: {
+    // 获取文章频道
+    getChannels() {
+        this.$axios({
+            url:'/mp/v1_0/channels'
+        }).then(result => {
+           this.channels = result.data.channels
+        })
+    },
     //获取内容数据
     getArticles() {
       //调用接口
@@ -90,6 +117,7 @@ export default {
 
   created() {
     this.getArticles();
+    this.getChannels()
   },
   filters: {
     //过滤文章状态
