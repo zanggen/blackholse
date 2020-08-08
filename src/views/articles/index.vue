@@ -36,11 +36,11 @@
       <div class="article-item" v-for="(item, index) in list" :key="index">
         <!-- 左侧内容 -->
         <div class="left">
-          <img src="../../assets/image/avatar.jpg" alt />
+          <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
           <div class="info">
-            <span class="title">channel_id</span>
-            <el-tag style="width:60px">已发表</el-tag>
-            <span class="date">2020-08-06 18:29:14</span>
+            <span class="title">{{item.title}}</span>
+            <el-tag style="width:70px">{{item.status|statusText}}</el-tag>
+            <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
         <!-- 右侧内容 -->
@@ -61,29 +61,78 @@
 export default {
   data() {
     return {
-      list: [1, 2, 3, 4, 5], //定义一个空数组
+      list: [], //定义一个空数组
+      defaultImg: require("../../assets/image/avatar.jpg"), //图片地址转成 base64
+
+      value: "",
+      value1: "",
     };
+  },
+  methods: {
+    //获取内容数据
+    getArticles() {
+      //调用接口
+      this.$axios({
+        url: "/mp/v1_0/articles",
+        //   params:{response_type:'statistic'}
+      }).then((result) => {
+        this.list = result.data.results;
+      });
+    },
+    //     getArticles () {
+    //      this.$axios({
+    //        url: '/articles'
+    //      }).then(result => {
+    //        this.list = result.data.results
+    //      })
+    //    }
+  },
+
+  created() {
+    this.getArticles();
+  },
+  filters: {
+    //过滤文章状态
+    statusText(value) {
+      switch (value) {
+        case 0:
+          return "草稿";
+          break;
+        case 1:
+          return "待审核";
+          break;
+        case 2:
+          return "审核通过";
+          break;
+        case 3:
+          return "审核失败";
+          break;
+
+        default:
+          break;
+      }
+    },
   },
 };
 </script>
 
 <style lang='less' scoped>
-.total-info{
-    border-bottom: 1px dashed #ccc;
-    padding: 15px 0;
-    color: #323745;
-    font-size: 14px;
+.total-info {
+  border-bottom: 1px dashed #ccc;
+  padding: 15px 0;
+  color: #323745;
+  font-size: 14px;
 }
 .article-list {
   .article-item {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #f2f3f5;
     .left {
       display: flex;
       img {
-        width: 180px;
+        width: 150px;
         height: 100px;
         border-radius: 5px;
       }
@@ -91,14 +140,14 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        margin-left: 10px; 
-        .date{
-            color: #999;
-            font-size: 12px;
+        margin-left: 10px;
+        .date {
+          color: #999;
+          font-size: 12px;
         }
-        .title{
-            color: #333;
-            font-size: 14px;
+        .title {
+          color: #333;
+          font-size: 14px;
         }
       }
     }

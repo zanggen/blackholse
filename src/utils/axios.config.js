@@ -9,7 +9,7 @@ axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'  //把基础地址给
 
 axios.defaults.transformResponse = [function (data) {
     // data 是响应回来的(后台传过来的) 字符串
-    
+   
     return data ? jsonBigInt.parse(data) : {}
 
 }]
