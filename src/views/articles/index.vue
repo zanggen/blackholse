@@ -8,7 +8,7 @@
     <el-form style="margin-left:30px">
       <el-form-item label="文章状态:">
         <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
-        <el-radio-group v-model="searchForm.status">
+        <el-radio-group @change="changeCondition" v-model="searchForm.status">
           <el-radio :label="5" >全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
           <el-radio :label="1">待审核</el-radio>
@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item label="频道列表">
          
-        <el-select v-model="searchForm.channel_id" >
+        <el-select @change="changeCondition" v-model="searchForm.channel_id" >
             <el-option 
             v-for="item in channels" 
             :key="item.id"  
@@ -29,7 +29,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="时间选择">
-        <el-date-picker
+        <el-date-picker 
+        @change="changeCondition"
         value-format="yyyy-MM-dd"
           v-model="searchForm.dateRange"
           type="daterange"
@@ -78,7 +79,7 @@ export default {
         //定义表单对象
         status: 5, //文章状态
         channel_id: null,  //频道列表
-        dateRange:'' //日期范围
+        dateRange:'' //日期范围  数组[起始时间,截至时间]
 
 
       },
@@ -88,6 +89,26 @@ export default {
     };
   },
   methods: {
+    // 文章状态变化
+    changeCondition() {
+      let params = {
+          status:this.searchForm.status === 5? null :this.searchForm.status,
+          channel_id:this.searchForm.channel_id,
+          begin_pubdate:this.searchForm.dateRange.length > 0 ? this.searchForm.dateRange[0] : null ,
+          end_pubdate:this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
+        }
+     this.getArticles(params) // 传params  参数 里面的params 就是
+    },
+     //获取内容数据
+    getArticles(params) {
+      //调用接口
+      this.$axios({
+        url: "/mp/v1_0/articles",
+        params
+      }).then((result) => {
+        this.list = result.data.results;
+      });
+    },
     // 获取文章频道
     getChannels() {
         this.$axios({
@@ -96,23 +117,8 @@ export default {
            this.channels = result.data.channels
         })
     },
-    //获取内容数据
-    getArticles() {
-      //调用接口
-      this.$axios({
-        url: "/mp/v1_0/articles",
-        //   params:{response_type:'statistic'}
-      }).then((result) => {
-        this.list = result.data.results;
-      });
-    },
-    //     getArticles () {
-    //      this.$axios({
-    //        url: '/articles'
-    //      }).then(result => {
-    //        this.list = result.data.results
-    //      })
-    //    }
+   
+ 
   },
 
   created() {
@@ -130,7 +136,7 @@ export default {
           return "待审核";
           break;
         case 2:
-          return "审核通过";
+          return "已发表";
           break;
         case 3:
           return "审核失败";
