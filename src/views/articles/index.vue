@@ -9,29 +9,22 @@
       <el-form-item label="文章状态:">
         <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
         <el-radio-group @change="changeCondition" v-model="searchForm.status">
-          <el-radio :label="5" >全部</el-radio>
+          <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
           <el-radio :label="1">待审核</el-radio>
           <el-radio :label="2">审核通过</el-radio>
           <el-radio :label="3">审核失败</el-radio>
-          
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
-         
-        <el-select @change="changeCondition" v-model="searchForm.channel_id" >
-            <el-option 
-            v-for="item in channels" 
-            :key="item.id"  
-            :label="item.name" 
-            :value="item.id"  
-            ></el-option>
+        <el-select @change="changeCondition" v-model="searchForm.channel_id">
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间选择">
-        <el-date-picker 
-        @change="changeCondition"
-        value-format="yyyy-MM-dd"
+        <el-date-picker
+          @change="changeCondition"
+          value-format="yyyy-MM-dd"
           v-model="searchForm.dateRange"
           type="daterange"
           start-placeholder="开始日期"
@@ -39,9 +32,9 @@
         ></el-date-picker>
       </el-form-item>
     </el-form>
-    {{searchForm}}
+
     <!-- 内容结构 -->
-    <div class="total-info">共找到59279条符合条件的内容</div>
+    <div class="total-info">共找到{{page.total}}条符合条件的内容</div>
 
     <div class="article-list">
       <!-- 循环项 -->
@@ -66,6 +59,18 @@
         </div>
       </div>
     </div>
+    <!-- 分页 -->
+    <el-row type="flex" justify="center" style="margin-top:10px">
+      <el-pagination
+        :current-page="page.page"
+        :page-size="page.pageSize"
+        :total="page.total"
+        @current-change="changePage"
+        style="margin:10px"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -78,52 +83,77 @@ export default {
       searchForm: {
         //定义表单对象
         status: 5, //文章状态
-        channel_id: null,  //频道列表
-        dateRange:'' //日期范围  数组[起始时间,截至时间]
-
-
+        channel_id: null, //频道列表
+        dateRange: "", //日期范围  数组[起始时间,截至时间]
+      },
+      page: {
+        page: 1, //当前页
+        pageSize: 20, //当前每页条数
+        total: 0, //总条数
       },
 
-      channels: [],//频道列表数据
+      channels: [], //频道列表数据
       value1: "",
     };
   },
   methods: {
-    // 文章状态变化
-    changeCondition() {
+
+    //获取筛选的数据
+    getConditonArticle() {
       let params = {
-          status:this.searchForm.status === 5? null :this.searchForm.status,
-          channel_id:this.searchForm.channel_id,
-          begin_pubdate:this.searchForm.dateRange.length > 0 ? this.searchForm.dateRange[0] : null ,
-          end_pubdate:this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
-        }
-     this.getArticles(params) // 传params  参数 里面的params 就是
+        status: this.searchForm.status === 5 ? null : this.searchForm.status,
+        channel_id: this.searchForm.channel_id,
+        begin_pubdate:
+          this.searchForm.dateRange.length > 0
+            ? this.searchForm.dateRange[0]
+            : null,
+        end_pubdate:
+          this.searchForm.dateRange.length > 1
+            ? this.searchForm.dateRange[1]
+            : null,
+        page: this.page.page,
+        per_page: this.page.pageSize,
+      };
+      this.getArticles(params);
     },
-     //获取内容数据
+    //页面变化
+    changePage(newPage) {
+      this.page.page = newPage; // 赋值新页码
+      this.getConditonArticle()//获取筛选数据
+    },
+
+    // 改变搜索条件时
+    changeCondition() {
+      this.page.page = 1;
+     this.getConditonArticle()//获取筛选数据
+    },
+    //获取内容数据
     getArticles(params) {
       //调用接口
       this.$axios({
         url: "/mp/v1_0/articles",
-        params
+        params,
+
+        page: this.page.page,
+        per_page: this.page.pageSize,
       }).then((result) => {
         this.list = result.data.results;
+        this.page.total = result.data.total_count;
       });
     },
     // 获取文章频道
     getChannels() {
-        this.$axios({
-            url:'/mp/v1_0/channels'
-        }).then(result => {
-           this.channels = result.data.channels
-        })
+      this.$axios({
+        url: "/mp/v1_0/channels",
+      }).then((result) => {
+        this.channels = result.data.channels;
+      });
     },
-   
- 
   },
 
   created() {
     this.getArticles();
-    this.getChannels()
+    this.getChannels();
   },
   filters: {
     //过滤文章状态
