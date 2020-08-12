@@ -44,7 +44,7 @@
           <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
           <div class="info">
             <span class="title">{{item.title}}</span>
-            <el-tag style="width:70px">{{item.status|statusText}}</el-tag>
+            <el-tag :type="item.status|statusType" style="width:70px">{{item.status|statusText}}</el-tag>
             <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
@@ -176,6 +176,24 @@ export default {
           break;
       }
     },
+    //样式过滤
+    statusType (value) {
+      switch (value) {
+        case 0:
+          return'warning'
+          break;
+             case 1:
+          return'info'
+          break;
+             case 2:
+          return'success'
+          break;
+             
+      
+        default:
+          break;
+      }
+    }
   },
 };
 </script>
