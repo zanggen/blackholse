@@ -53,7 +53,7 @@
           <span>
             <i class="el-icon-edit"></i>修改
           </span>
-          <span>
+          <span @click="delItem(item)" >
             <i class="el-icon-delete"></i>删除
           </span>
         </div>
@@ -97,6 +97,20 @@ export default {
     };
   },
   methods: {
+    //删除内容
+    delItem(item) {
+      this.$confirm("你确定要删除么?", "提示").then(() => {
+        // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
+        this.$axios({
+          url: `/mp/v1_0/articles/${item.id.toString()}`,
+          method: "delete"
+        }).then(() => {
+          debugger
+          //重新拉取数据
+          this.getConditonArticle();
+        });
+      });
+    },
 
     //获取筛选的数据
     getConditonArticle() {
@@ -119,13 +133,13 @@ export default {
     //页面变化
     changePage(newPage) {
       this.page.page = newPage; // 赋值新页码
-      this.getConditonArticle()//获取筛选数据
+      this.getConditonArticle(); //获取筛选数据
     },
 
     // 改变搜索条件时
     changeCondition() {
       this.page.page = 1;
-     this.getConditonArticle()//获取筛选数据
+      this.getConditonArticle(); //获取筛选数据
     },
     //获取内容数据
     getArticles(params) {
@@ -176,24 +190,23 @@ export default {
           break;
       }
     },
-    //样式过滤
-    statusType (value) {
+    //按钮样式过滤
+    statusType(value) {
       switch (value) {
         case 0:
-          return'warning'
+          return "warning";
           break;
-             case 1:
-          return'info'
+        case 1:
+          return "info";
           break;
-             case 2:
-          return'success'
+        case 2:
+          return "success";
           break;
-             
-      
+
         default:
           break;
       }
-    }
+    },
   },
 };
 </script>
