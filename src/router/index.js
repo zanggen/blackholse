@@ -31,6 +31,11 @@ const routes = [
     }
     ,{
       
+      // path: '/home/publish', 
+      path: 'publish', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
+      component: () => import( '../views/publish')  //按需加载
+    }
+    ,{
       // path: '/home/comment', 
       path: 'comment', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/comment')  //按需加载

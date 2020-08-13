@@ -44,7 +44,7 @@
           <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
           <div class="info">
             <span class="title">{{item.title}}</span>
-            <el-tag :type="item.status|statusType" style="width:70px">{{item.status|statusText}}</el-tag>
+            <el-tag :type="item.status|statusType" :style="item.status|statusWidth">{{item.status|statusText}}</el-tag>
             <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
@@ -53,7 +53,7 @@
           <span>
             <i class="el-icon-edit"></i>修改
           </span>
-          <span @click="delItem(item)" >
+          <span @click="delItem(item)">
             <i class="el-icon-delete"></i>删除
           </span>
         </div>
@@ -103,9 +103,9 @@ export default {
         // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
         this.$axios({
           url: `/mp/v1_0/articles/${item.id.toString()}`,
-          method: "delete"
+          method: "delete",
         }).then(() => {
-          debugger
+          debugger;
           //重新拉取数据
           this.getConditonArticle();
         });
@@ -201,6 +201,23 @@ export default {
           break;
         case 2:
           return "success";
+          break;
+
+        default:
+          break;
+      }
+    },
+    //按钮宽度过滤
+    statusWidth(value) {
+      switch (value) {
+        case 0:
+          return "width:40px";
+          break;
+          case 1:
+          return "width:80px";
+          break;
+          case 2:
+          return "width:60px";
           break;
 
         default:
