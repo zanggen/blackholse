@@ -5,7 +5,7 @@
     <!-- 左侧 -->
     <el-col class="left" :span="6">
       <i class="el-icon-s-unfold"></i>
-      <span>怦怦信息技术(上海)有限公司</span>
+      <span>我的头条</span>
     </el-col>
 
     <!-- 右侧 -->

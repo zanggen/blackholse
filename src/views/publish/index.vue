@@ -3,9 +3,10 @@
     <bread-crumb slot="header">
       <template slot="title">发布文章</template>
     </bread-crumb>
-{{formData}}
+    <!-- {{formData}} -->
+    <!-- 表单 -->
     <el-form
-    ref="publishForm"
+      ref="publishForm"
       :model="formData"
       :rules="publishRules"
       style="margin-left:10px"
@@ -25,8 +26,8 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="频道" prop="channel">
-        <el-select v-model="formData.channel">
+      <el-form-item label="频道" prop="channel_id">
+        <el-select v-model="formData.channel_id">
           <!-- :key 索引值  :value id  :label 名字-->
           <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
         </el-select>
@@ -41,6 +42,7 @@
 export default {
   data() {
     return {
+      //校验表单
       formData: {
         title: "", //标题
         content: "", //内容
@@ -49,8 +51,9 @@ export default {
           type: 0,
           images: "",
         },
-        channel: null, //频道
+        channel_id: null, //频道
       },
+      //校验规则
       publishRules: {
         title: [
           {
@@ -64,7 +67,7 @@ export default {
             message: "内容不能为空",
           },
         ],
-        channel: [
+        channel_id: [
           {
             required: true, // required 意味必填
             message: "频道不能为空",
@@ -76,16 +79,22 @@ export default {
     };
   },
   methods: {
-      //发表 
-      publish () {
-          this.$refs.publishForm.validate(isOk => {
-              if(isOk) {
-                  console.log("成功")
-              } else {
-                  console.log("失败")
-              }
-          })
-      },
+    //发表
+    publish() {
+      this.$refs.publishForm.validate((isOk) => {
+        if (isOk) {
+          this.$axios({
+            url: "/mp/v1_0/articles",
+            method: "post",
+            params: { draft: false }, //true 的时候是草稿   false 的话 就是 发表
+            data: this.formData
+          }).then(() => {
+            //发表之后  我们要跳转到  内容列表  编程式导航
+            this.$router.push("/home/articles");
+          });
+        }
+      });
+    },
     //获取频道列表
     getChannels() {
       this.$axios({

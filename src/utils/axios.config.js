@@ -31,6 +31,7 @@ axios.interceptors.response.use(function (response) {
     return response.data ? response.data : {}
     // 下面是 对异常数据 统一处理
 }, function (error) {
+    
     let status = error.response.status
     let message = ''
     switch (status) {

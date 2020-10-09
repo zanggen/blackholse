@@ -100,12 +100,13 @@ export default {
     //删除内容
     delItem(item) {
       this.$confirm("你确定要删除么?", "提示").then(() => {
+        
         // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
         this.$axios({
           url: `/mp/v1_0/articles/${item.id.toString()}`,
           method: "delete",
         }).then(() => {
-          debugger;
+          console.log('heihei')
           //重新拉取数据
           this.getConditonArticle();
         });
