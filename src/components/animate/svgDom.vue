@@ -1,4 +1,12 @@
 <template>
+  <div class="wrapper" >
+    <div class="heading"> 
+      <span class="char1" data-heading="H">H</span> 
+      <span class="char2" data-heading="E">E</span> 
+      <span class="char3" data-heading="L">L</span> 
+      <span class="char4" data-heading="L">L</span> 
+      <span class="char5" data-heading="O">O</span>
+    </div>
   <svg viewBox="0 -5 157.9 210">
     <!-- <style>
       .st1{fill:#d78d40}.st6,.st8{fill:#587434}.st8{clip-path:url(#SVGID_8_)}.st11{fill:#e8a2c1}.st12{fill:#a4466d}.st14{fill:#e35c98}.st15{fill:#1c2816}.st16{fill:#f2f6dc}
@@ -238,6 +246,7 @@
       />
     </g>
   </svg>
+  </div>
 </template>
 
 <script>
@@ -265,4 +274,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "/svg/shouye.css";
+@import "/svg/hello.css";
+
 </style>
