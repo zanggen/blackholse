@@ -9,16 +9,20 @@
       ref="publishForm"
       :model="formData"
       :rules="publishRules"
-      style="margin-left:10px"
+      style="margin-left: 10px"
       label-width="100px"
     >
       <el-form-item label="标题" prop="title">
-        <el-input style="width:400px" v-model="formData.title"></el-input>
+        <el-input style="width: 400px" v-model="formData.title"></el-input>
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <el-input type="textarea" :rows="2" v-model="formData.content"></el-input>
+        <el-input
+          type="textarea"
+          :rows="2"
+          v-model="formData.content"
+        ></el-input>
       </el-form-item>
-      <el-form-item label="封面" >
+      <el-form-item label="封面">
         <el-radio-group v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
@@ -29,11 +33,16 @@
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
           <!-- :key 索引值  :value id  :label 名字-->
-          <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
+          <el-option
+            v-for="item in channels"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          ></el-option>
         </el-select>
       </el-form-item>
-      <el-button type="primary" @click="publish">发表</el-button>
-      <el-button>存入草稿</el-button>
+      <el-button type="primary" @click="publish(false)">发表</el-button>
+      <el-button @click="publish(true)">存入草稿</el-button>
     </el-form>
   </el-card>
 </template>
@@ -49,7 +58,7 @@ export default {
         cover: {
           // 封面类型 -1:自动，0-无图，1-1张，3-3张
           type: 0,
-          images: "",
+          images: [],
         },
         channel_id: null, //频道
       },
@@ -79,15 +88,30 @@ export default {
     };
   },
   methods: {
+    
     //发表
-    publish() {
-      this.$refs.publishForm.validate((isOk) => {
-        if (isOk) {
+    publish(draft) {
+      // this.$refs.publishForm.validate((isOK) => {
+      //   if (isOK) {
+      //     this.$axios({
+      //       url:"/mp/v1_0/articles",
+      //       method:'post',
+      //       params:{draft: false},// true  草稿  false 发表
+      //       data: this.formData
+      //     }).then(() => {//成功之后 跳转到 内容列表  编程式导航
+      //      this.$router.push("/home/articles")
+      //     })
+      //   }
+      // })
+
+      // 原代码
+      this.$refs.publishForm.validate((isOK) => {
+        if (isOK) {
           this.$axios({
-            url: "/mp/v1_0/articles",
-            method: "post",
-            params: { draft: false }, //true 的时候是草稿   false 的话 就是 发表
-            data: this.formData
+            url:"/mp/v1_0/articles",
+            method: 'post',
+            params: { draft }, //true 的时候是草稿   false 的话 就是 发表
+            data: this.formData,
           }).then(() => {
             //发表之后  我们要跳转到  内容列表  编程式导航
             this.$router.push("/home/articles");
@@ -104,8 +128,21 @@ export default {
       });
     },
   },
+  //根据id 获取相应的文章
+    getArticleById (articleId) {
+      this.$axios({
+        url:`/mp/v1_0/${articles}`
+      }).then(result => {
+        this.formData = result.data
+      })
+    },
   created() {
-    this.getChannels();
+    this.getChannels();//获取频道
+    let {articleId} = this.$route.params
+    if (articleId) {
+// 如果存在  id 就是修改文章  通过id 获取当前的文章数据
+this.getArticleById(articleId)
+    }
   },
 };
 </script>

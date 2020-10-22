@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
-import Main from '../views/home/main'
+// import Main from '../views/home/main'
+import Main from '../views/home/main2'
 
 
 
@@ -31,30 +32,36 @@ const routes = [
     }
     ,{
       
-      // path: '/home/publish', 
+      // 发布文章 
       path: 'publish', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/publish')  //按需加载
     }
     ,{
-      // path: '/home/comment', 
+      
+      // 修改文章 
+      path: 'publish/:articleId', //动态路由
+      component: () => import( '../views/publish')  //按需加载
+    }
+    ,{
+      // 评论列表' 
       path: 'comment', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/comment')  //按需加载
     }
     ,{
       
-      // path: '/home/material', 
+      // 素材列表 
       path: 'material', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/material')  //按需加载
     }
     ,{
       
-      // path: '/home/material', 
+      //内容列表
       path: 'articles', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/articles')  //按需加载
     }
     ,{
       
-      // path: '/home/fansdata', 
+      //  图文数据
       path: 'fansdata', //二级路由 地址不能已/(斜杠)开头 , 因为这样会从根上计算路径
       component: () => import( '../views/fansdata')  //按需加载
     }

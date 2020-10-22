@@ -5,7 +5,7 @@
       <template slot="title">内容列表</template>
     </bread-crumb>
     <!-- 搜索栏工具栏 -->
-    <el-form style="margin-left:30px">
+    <el-form style="margin-left: 30px">
       <el-form-item label="文章状态:">
         <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
         <el-radio-group @change="changeCondition" v-model="searchForm.status">
@@ -18,7 +18,12 @@
       </el-form-item>
       <el-form-item label="频道列表">
         <el-select @change="changeCondition" v-model="searchForm.channel_id">
-          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          <el-option
+            v-for="item in channels"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间选择">
@@ -34,25 +39,30 @@
     </el-form>
 
     <!-- 内容结构 -->
-    <div class="total-info">共找到{{page.total}}条符合条件的内容</div>
+    <div class="total-info">共找到{{ page.total }}条符合条件的内容</div>
 
     <div class="article-list">
       <!-- 循环项 -->
       <div class="article-item" v-for="(item, index) in list" :key="index">
         <!-- 左侧内容 -->
         <div class="left">
-          <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
+          <img
+            :src="item.cover.images.length ? item.cover.images[0] : defaultImg"
+            alt
+          />
           <div class="info">
-            <span class="title">{{item.title}}</span>
-            <el-tag :type="item.status|statusType" :style="item.status|statusWidth">{{item.status|statusText}}</el-tag>
-            <span class="date">{{item.pubdate}}</span>
+            <span class="title">{{ item.title }}</span>
+            <el-tag
+              :type="item.status | statusType"
+              :style="item.status | statusWidth"
+              >{{ item.status | statusText }}</el-tag
+            >
+            <span class="date">{{ item.pubdate }}</span>
           </div>
         </div>
         <!-- 右侧内容 -->
         <div class="right">
-          <span>
-            <i class="el-icon-edit"></i>修改
-          </span>
+          <span @click="modifiItem(item)"> <i class="el-icon-edit"></i>修改 </span>
           <span @click="delItem(item)">
             <i class="el-icon-delete"></i>删除
           </span>
@@ -60,13 +70,13 @@
       </div>
     </div>
     <!-- 分页 -->
-    <el-row type="flex" justify="center" style="margin-top:10px">
+    <el-row type="flex" justify="center" style="margin-top: 10px">
       <el-pagination
         :current-page="page.page"
         :page-size="page.pageSize"
         :total="page.total"
         @current-change="changePage"
-        style="margin:10px"
+        style="margin: 10px"
         background
         layout="prev, pager, next"
       ></el-pagination>
@@ -97,20 +107,29 @@ export default {
     };
   },
   methods: {
-    //删除内容
+    // 修改内容
+    modifiItem(item) {
+      // 跳转到发布页面 
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
+
+    //删除内容  (只能删除 草稿  发表文章删除不了)
     delItem(item) {
-      this.$confirm("你确定要删除么?", "提示").then(() => {
-        
-        // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
-        this.$axios({
-          url: `/mp/v1_0/articles/${item.id.toString()}`,
-          method: "delete",
-        }).then(() => {
-          console.log('heihei')
-          //重新拉取数据
-          this.getConditonArticle();
+      this.$confirm("你确定要删除么?", "提示")
+        .then(() => {
+          // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
+          this.$axios({
+            url: `/mp/v1_0/articles/${item.id.toString()}`,
+            method: "delete",
+          }).then(() => {
+            // this.$alert("删除成功")
+            //重新拉取数据
+            this.getConditonArticle();
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      });
     },
 
     //获取筛选的数据
@@ -214,10 +233,10 @@ export default {
         case 0:
           return "width:40px";
           break;
-          case 1:
+        case 1:
           return "width:80px";
           break;
-          case 2:
+        case 2:
           return "width:60px";
           break;
 
