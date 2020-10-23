@@ -263,6 +263,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-@import "/svg/shouye.css";
+<style  scoped>
+/* @import "/svg/shouye.css"; */
 </style>

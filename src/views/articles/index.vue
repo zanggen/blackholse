@@ -98,7 +98,7 @@ export default {
       },
       page: {
         page: 1, //当前页
-        pageSize: 20, //当前每页条数
+        pageSize: 10, //当前每页条数
         total: 0, //总条数
       },
 
