@@ -2,8 +2,14 @@ import layoutAside from './home/layout-aside.vue'
 import layoutHead from './home/layout-head.vue' 
 import breadCrumb from './common/bread-crumb.vue'
 import svgDom from './animate/svgDom.vue'
-//所有自定义组件的插件
 
+
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+ 
+import { quillEditor } from 'vue-quill-editor'
+//所有自定义组件的插件
 export default {
     // 导出一个 install方法  => 传入Vue 对象
     install: function (Vue) {
@@ -11,6 +17,6 @@ export default {
         Vue.component('layout-head',layoutHead) //头部导航组件
         Vue.component('bread-crumb',breadCrumb) //注册面包屑组件
         Vue.component('svgDom', svgDom)//动画组件
-
+        Vue.component('quill-editor',quillEditor )
     }
 }
