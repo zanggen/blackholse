@@ -3,7 +3,7 @@ let spinesinterval = null;
 const cactus = document.querySelector('.cactus');
 let x = 0;
 let y = 0;
-console.log(document.querySelector('svg'))
+// console.log(document.querySelector('svg'))
 document.querySelector('svg').addEventListener('mousedown', () => {
   amountSpines = 0;
   mousedown = true;

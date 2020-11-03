@@ -88,7 +88,6 @@ export default {
     };
   },
   methods: {
-    
     //发表
     publish(draft) {
       // this.$refs.publishForm.validate((isOK) => {
@@ -104,12 +103,14 @@ export default {
       //   }
       // })
 
-      // 原代码
+      //  判断发布的内容是 新增 还是 修改 根据 articleId 来 判断
       this.$refs.publishForm.validate((isOK) => {
         if (isOK) {
-          this.$axios({
-            url:"/mp/v1_0/articles",
-            method: 'post',
+          // 只有校验成功了 才去管是新增还是修改 
+          let {articleId} = this.$route.params//获取Id
+          this.$axios({//用三元来判断
+            url: articleId ? `/mp/v1_0/articles/${articleId}` : "/mp/v1_0/articles" ,
+            method: articleId ?'put'  : "post",
             params: { draft }, //true 的时候是草稿   false 的话 就是 发表
             data: this.formData,
           }).then(() => {
@@ -127,21 +128,22 @@ export default {
         this.channels = result.data.channels;
       });
     },
+    getArticleById(articleId) {
+    this.$axios({
+      url: `/mp/v1_0/articles/${articleId}`
+    }).then((result) => {
+      this.formData = result.data;
+    });
+  }
   },
   //根据id 获取相应的文章
-    getArticleById (articleId) {
-      this.$axios({
-        url:`/mp/v1_0/${articles}`
-      }).then(result => {
-        this.formData = result.data
-      })
-    },
+  
   created() {
-    this.getChannels();//获取频道
-    let {articleId} = this.$route.params
+    this.getChannels(); //获取频道
+    let { articleId } = this.$route.params;
     if (articleId) {
-// 如果存在  id 就是修改文章  通过id 获取当前的文章数据
-this.getArticleById(articleId)
+      // 如果存在  id 就是修改文章  通过id 获取当前的文章数据
+      this.getArticleById(articleId);
     }
   },
 };
